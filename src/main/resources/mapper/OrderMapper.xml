@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.databasebigwork.dao.OrderMapper">
+
+
+    <select id="orderList" resultType="com.example.databasebigwork.pojo.Order">
+        select *
+        from previeworder limit #{page},10
+    </select>
+
+    <select id="myorders" resultType="com.example.databasebigwork.pojo.Order">
+        select *
+        from orderdetail
+        where suid = #{uid} or ruid = #{uid}
+    </select>
+
+    <insert id="put">
+        insert into orders
+        values (#{oid}, #{suid}, #{uaid}, #{pid}, null, #{stime}, #{etime}, #{status}, #{value}, #{size}, #{note},
+                #{get_way})
+    </insert>
+
+    <delete id="delete">
+        delete
+        from orders
+        where order_id = #{oid}
+    </delete>
+
+    <update id="modify" parameterType="com.example.databasebigwork.pojo.Order">
+        update orders
+        <set>
+            <if test="uaid != null">add_id = #{uaid}</if>
+            <if test="pid != null">,post_id = #{pid}</if>
+            <if test="coin != 0">,coin = #{coin}</if>
+            <if test="size != null">,size = #{size}</if>
+            <if test="note != null">,note = #{note}</if>
+            <if test="get_way != null">,get_way = #{get_way}</if>
+        </set>
+        where order_id = #{oid}
+    </update>
+
+    <update id="get">
+        update orders
+        <set>
+            recipient_id = #{uid}
+        </set>
+        where order_id = #{oid}
+    </update>
+
+    <select id="getOrder" resultType="com.example.databasebigwork.pojo.Order">
+        select *
+        from orderdetail
+        where oid = #{oid}
+    </select>
+
+    <update id="addCoinTo">
+        update user
+        set sum_coin = #{coin}
+        where user_id = #{uid}
+    </update>
+
+    <select id="getSumCoin" resultType="Integer">
+        select sum_coin
+        from user
+        where user_id = #{uid}
+    </select>
+
+    <update id="finish">
+        update orders
+        set end_time = now(),
+            status   = '3'
+        where order_id = #{oid}
+          and status = '2'
+    </update>
+
+    <select id="find" resultType="com.example.databasebigwork.pojo.Order">
+            select *
+            from previeworder
+            <where>
+                <if test="find.coin != 0">
+                    <choose>
+                        <when test="find.coin == 1">coin >= 1 and coin &lt;= 50</when>
+                        <when test="find.coin == 2">coin >= 51 and coin &lt;= 100</when>
+                        <when test="find.coin == 3">coin >= 100</when>
+                    </choose>
+                </if>
+                <if test="find.pid != null">and pid = #{find.pid}</if>
+
+                <if test="find.size != 0">and size = #{find.size}</if>
+            </where>
+        limit #{page},10
+    </select>
+</mapper>

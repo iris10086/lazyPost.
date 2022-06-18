@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.databasebigwork.dao.UserMapper">
+
+    <resultMap id="User" type="com.example.databasebigwork.pojo.User">
+        <id property="uid" column="uid"></id>
+        <result property="username" column="username"></result>
+        <result property="phone" column="phone"></result>
+        <result property="head" column="head"></result>
+        <result property="count" column="count"></result>
+        <result property="desc" column="description"></result>
+    </resultMap>
+
+    <select id="getUserByUid" resultMap="User">
+        select *
+        from userdetail
+        where uid = #{uid}
+    </select>
+
+    <select id="getUsernameByPhone" resultType="String">
+        select uid
+        from checklogin
+        where phone = #{phone}
+    </select>
+
+
+<!--    insert into user values(#{user.uid},#{user.username},#{user.password},#{user.phonenumber},#{user.headpath},#{user.count},#{user.desc})-->
+    <insert id="registerUser">
+        insert into user
+        values
+       (#{user.uid},#{user.password},#{user.username},#{user.phone},#{user.head},#{user.count},#{user.desc})
+    </insert>
+
+    <select id="getUidByPhoneAndPassword" resultType="String" parameterType="String">
+        select uid
+        from checklogin
+        where phone = #{phone} and password = #{password}
+    </select>
+
+    <update id="userModify" parameterType="com.example.databasebigwork.pojo.User">
+        update userdetail
+        <set>
+            <if test="user.username != null">username = #{user.username}</if>
+            <if test="user.head != null">,head = #{user.head}</if>
+            <if test="user.desc != null">,description = #{user.desc}</if>
+        </set>
+        where uid = #{user.uid}
+    </update>
+
+    <delete id="userDelete">
+        delete from userdetail
+        where uid = #{uid}
+    </delete>
+
+    <update id="modifyPassword">
+        update checklogin
+        set password = #{password}
+        where uid = #{uid} and password = #{old}
+    </update>
+
+</mapper>

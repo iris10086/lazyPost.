@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.databasebigwork.dao.AddressMapper">
+
+    <select id="getList" resultType="com.example.databasebigwork.pojo.UserAddress">
+        select *
+        from uaddr
+        where uid = #{uid}
+    </select>
+
+    <insert id="addAddress" parameterType="com.example.databasebigwork.pojo.UserAddress">
+        insert into uaddr
+        values (#{addr.aid},#{addr.uid},#{addr.name},#{addr.address},#{addr.phone})
+    </insert>
+
+    <update id="modifyAddr" parameterType="com.example.databasebigwork.pojo.UserAddress">
+        update uaddr
+        <set>
+            <if test="addr.name != null">name = #{addr.name}</if>
+            <if test="addr.address != null">,address = #{addr.address}</if>
+            <if test="addr.phone != null">,phone = #{addr.phone}</if>
+        </set>
+        where aid = #{addr.aid}
+    </update>
+
+    <delete id="deleteAddr">
+        delete from uaddr
+        where aid = #{aid}
+    </delete>
+
+    <delete id="deleteAddrs" parameterType="java.util.Set">
+        delete from uaddr
+            <where>
+                <choose>
+                    <when test="aids != null and aids.size() > 0">
+                        aid
+                        <foreach collection="aids" open="in (" close=")"
+                                 item="aid" separator=",">
+                            #{aid}
+                        </foreach>
+
+                    </when>
+                    <otherwise>
+                        aid = 0
+                    </otherwise>
+                </choose>
+            </where>
+
+    </delete>
+
+    <resultMap id="postAddr" type="com.example.databasebigwork.pojo.Paddr">
+        <id column="post_id" property="pid"></id>
+        <result property="pname" column="post_name"></result>
+        <result property="pStation" column="post_add"></result>
+    </resultMap>
+
+    <select id="getPAddr" resultMap="postAddr">
+        select *
+        from postaddress;
+    </select>
+</mapper>

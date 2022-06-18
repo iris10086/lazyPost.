@@ -1,0 +1,38 @@
+spring:
+  application:
+    name: DatabaseBigWork
+  banner:
+#    banner图配置
+    location: static/banner.txt
+  datasource:
+#    数据库链接配置
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql:///lazy_post
+    username: root
+    password: hejieze2684
+    type: com.alibaba.druid.pool.DruidDataSource
+  mvc:
+#    静态资源访问前缀
+    static-path-pattern: /res/**
+  jackson:
+    default-property-inclusion: non_null
+  redis:
+    password:
+    port: 6379
+    jedis:
+      pool:
+        max-wait: 300ms
+
+#  服务器配置
+server:
+  port: 80
+  error:
+    path: "classpath:/error/errorPage.html"
+  address: 0.0.0.0
+mybatis:
+#  mybatis配置
+  mapper-locations: "classpath:mapper/*.xml"
+  type-aliases-package: com.example.databasebigwork.dao
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
