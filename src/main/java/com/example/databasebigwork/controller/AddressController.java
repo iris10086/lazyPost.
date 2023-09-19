@@ -6,14 +6,15 @@ import com.example.databasebigwork.pojo.Result;
 import com.example.databasebigwork.pojo.User;
 import com.example.databasebigwork.pojo.UserAddress;
 import com.example.databasebigwork.service.AddressService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
+@Api()
 @RestController
 @RequestMapping("/addr")
 public class AddressController {
@@ -21,34 +22,35 @@ public class AddressController {
     @Autowired
     AddressService addressService;
 
-    @RequestMapping("/getlist/{uid}")
-    public ArrayList<UserAddress> getList(@PathVariable("uid")String uid){
+    @ApiOperation("获取地址列表")
+    @GetMapping("/getlist/{uid}")
+    public ArrayList<UserAddress> getList(@ApiParam("用户ID")@PathVariable("uid")String uid){
         return addressService.getList(uid);
     }
 
-    @RequestMapping("/add")
+    @PostMapping("/add")
     public Result addAddress(@RequestBody UserAddress addr){
         return addressService.addAddress(addr);
     }
 
-    @RequestMapping("/modify")
+    @PostMapping("/modify")
     public Result modifyAddr(@RequestBody UserAddress addr){
         return addressService.modifyAddr(addr);
     }
 
-    @RequestMapping("/delete/{aid}")
+    @GetMapping("/delete/{aid}")
     public Result deleteAddr(@PathVariable("aid") String aid){
         return addressService.deleteAddr(aid);
     }
 
-    @RequestMapping("/deleteaddrs")
+    @PostMapping("/deleteaddrs")
     public Result deleteAddrs(@RequestBody ArrayList<String> aids){
         System.out.println("aids:"+aids);
         return addressService.deleteAddrs(aids);
     }
 
 
-    @RequestMapping("/paddrs")
+    @GetMapping("/paddrs")
     public ArrayList<Paddr> getPaddr(){
         return addressService.getPAddr();
     }

@@ -13,7 +13,7 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
   mvc:
 #    静态资源访问前缀
-    static-path-pattern: /res/**
+#    static-path-pattern: /res/**
   jackson:
     default-property-inclusion: non_null
   redis:
@@ -25,7 +25,7 @@ spring:
 
 #  服务器配置
 server:
-  port: 80
+  port: 8080
   error:
     path: "classpath:/error/errorPage.html"
   address: 0.0.0.0

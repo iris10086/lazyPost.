@@ -1,12 +1,19 @@
 package com.example.databasebigwork.pojo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
+@ApiModel("用户地址")
 public class UserAddress {
 //    @JsonProperty("addressId")
+    @ApiModelProperty("地址ID")
     private String aid; // 地址id
+    @ApiModelProperty("用户ID")
     private String uid; // user ID
     // @JsonProperty("recipient")
+    @ApiModelProperty("收件人昵称")
     private String name; // 收件人昵称
     // @JsonProperty("detailAddress")
     private String address; // 地址描述
